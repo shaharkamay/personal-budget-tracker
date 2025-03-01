@@ -49,10 +49,10 @@ const DataSettings: React.FC = () => {
         addExpense(expense);
       });
       
-      alert(`Successfully imported ${expenses.length} expenses and ${newCategories.length} new categories.`);
+      alert(`ייבוא מוצלח של ${expenses.length} הוצאות ו-${newCategories.length} קטגוריות חדשות.`);
     } catch (error) {
       console.error('Error importing expenses:', error);
-      alert('Failed to import expenses. Please check your CSV format.');
+      alert('נכשל בייבוא הוצאות. אנא בדוק את פורמט ה-CSV.');
     }
   };
   
@@ -65,44 +65,44 @@ const DataSettings: React.FC = () => {
         addIncome(income);
       });
       
-      alert(`Successfully imported ${incomes.length} income entries.`);
+      alert(`ייבוא מוצלח של ${incomes.length} רשומות הכנסה.`);
     } catch (error) {
       console.error('Error importing incomes:', error);
-      alert('Failed to import incomes. Please check your CSV format.');
+      alert('נכשל בייבוא הכנסות. אנא בדוק את פורמט ה-CSV.');
     }
   };
   
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-md font-medium mb-2">Export Data</h3>
+        <h3 className="text-md font-medium mb-2">ייצוא נתונים</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Export your budget data to CSV files for backup or analysis in other applications.
+          ייצא את נתוני התקציב שלך לקבצי CSV לגיבוי או ניתוח ביישומים אחרים.
         </p>
         
         <div className="flex space-x-2">
-          <Button variant="outline" onClick={handleExportExpenses}>
-            <Download size={16} className="mr-1" /> Export Expenses
+          <Button variant="outline" onClick={handleExportIncomes} className="mr-2">
+            <Download size={16} className="ml-1" /> ייצוא הכנסות
           </Button>
           
-          <Button variant="outline" onClick={handleExportIncomes}>
-            <Download size={16} className="mr-1" /> Export Income
+          <Button variant="outline" onClick={handleExportExpenses}>
+            <Download size={16} className="ml-1" /> ייצוא הוצאות
           </Button>
         </div>
       </div>
       
       <div>
-        <h3 className="text-md font-medium mb-2">Import Data</h3>
+        <h3 className="text-md font-medium mb-2">ייבוא נתונים</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Import data from CSV files. This will add to your existing data, not replace it.
+          ייבא נתונים מקבצי CSV. פעולה זו תוסיף לנתונים הקיימים שלך, ולא תחליף אותם.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardContent className="p-4">
-              <h4 className="font-medium text-gray-700 mb-2">Import Expenses</h4>
+              <h4 className="font-medium text-gray-700 mb-2">ייבוא הוצאות</h4>
               <p className="text-xs text-gray-500 mb-4">
-                CSV format: Date, Amount, Category, Description
+                פורמט CSV: תאריך, סכום, קטגוריה, תיאור
               </p>
               
               <CSVReader
@@ -118,8 +118,8 @@ const DataSettings: React.FC = () => {
                     fullWidth
                     {...getRootProps()}
                   >
-                    <Upload size={16} className="mr-1" />
-                    Choose Expenses CSV
+                    <Upload size={16} className="ml-1" />
+                    בחר קובץ CSV של הוצאות
                   </Button>
                 )}
               </CSVReader>
@@ -128,9 +128,9 @@ const DataSettings: React.FC = () => {
           
           <Card>
             <CardContent className="p-4">
-              <h4 className="font-medium text-gray-700 mb-2">Import Income</h4>
+              <h4 className="font-medium text-gray-700 mb-2">ייבוא הכנסות</h4>
               <p className="text-xs text-gray-500 mb-4">
-                CSV format: Date, Amount, Description
+                פורמט CSV: תאריך, סכום, תיאור
               </p>
               
               <CSVReader
@@ -146,8 +146,8 @@ const DataSettings: React.FC = () => {
                     fullWidth
                     {...getRootProps()}
                   >
-                    <Upload size={16} className="mr-1" />
-                    Choose Income CSV
+                    <Upload size={16} className="ml-1" />
+                    בחר קובץ CSV של הכנסות
                   </Button>
                 )}
               </CSVReader>

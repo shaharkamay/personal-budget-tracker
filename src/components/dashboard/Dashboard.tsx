@@ -53,35 +53,46 @@ const Dashboard: React.FC = () => {
   if (!data || !summary) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-gray-500">טוען...</p>
       </div>
     );
   }
+  
+  // Get Hebrew month name
+  const getHebrewMonth = () => {
+    const months = [
+      'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+      'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+    ];
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    return `${months[currentMonth]} ${currentYear}`;
+  };
   
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Monthly Budget Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-800">לוח מחוונים תקציב חודשי</h1>
           <p className="text-gray-600">
-            {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            {getHebrewMonth()}
           </p>
         </div>
         
-        <div className="flex space-x-2 mt-4 md:mt-0">
+        <div className="flex gap-2 mt-4 md:mt-0">
+          <Button
+            onClick={() => setShowAddExpense(true)}
+            className="text-sm"
+          >
+            <PlusCircle size={16} className="ml-1" /> הוסף הוצאה
+          </Button>
+          
           <Button
             variant="outline"
             onClick={() => setShowAddIncome(true)}
             className="text-sm"
           >
-            <PlusCircle size={16} className="mr-1" /> Add Income
-          </Button>
-          
-          <Button
-            onClick={() => setShowAddExpense(true)}
-            className="text-sm"
-          >
-            <PlusCircle size={16} className="mr-1" /> Add Expense
+            <PlusCircle size={16} className="ml-1" /> הוסף הכנסה
           </Button>
         </div>
       </div>
@@ -93,13 +104,13 @@ const Dashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold">Recent Transactions</h2>
+                <h2 className="text-lg font-semibold">עסקאות אחרונות</h2>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleExportExpenses}
                 >
-                  <Download size={16} className="mr-1" /> Export
+                  <Download size={16} className="ml-1" /> ייצוא
                 </Button>
               </div>
             </CardHeader>
@@ -115,7 +126,7 @@ const Dashboard: React.FC = () => {
         <div>
           <Card>
             <CardHeader>
-              <h2 className="text-lg font-semibold">Category Breakdown</h2>
+              <h2 className="text-lg font-semibold">פילוח לפי קטגוריה</h2>
             </CardHeader>
             <CardContent>
               <CategoryBreakdown
@@ -131,7 +142,7 @@ const Dashboard: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <h2 className="text-lg font-semibold">Add New Expense</h2>
+              <h2 className="text-lg font-semibold">הוסף הוצאה חדשה</h2>
             </CardHeader>
             <CardContent>
               <AddExpenseForm
@@ -147,7 +158,7 @@ const Dashboard: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <h2 className="text-lg font-semibold">Add New Income</h2>
+              <h2 className="text-lg font-semibold">הוסף הכנסה חדשה</h2>
             </CardHeader>
             <CardContent>
               <AddIncomeForm

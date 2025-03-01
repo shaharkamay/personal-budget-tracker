@@ -14,11 +14,11 @@ interface SetupWizardProps {
 const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
   const [step, setStep] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
-  
+
   const steps = [
-    { title: 'Welcome', component: <WelcomeStep /> },
-    { title: 'Categories', component: <CategoriesStep onCategoriesChange={setCategories} /> },
-    { title: 'Import Data', component: <ImportDataStep categories={categories} /> },
+    { title: 'ברוך הבא', component: <WelcomeStep /> },
+    { title: 'קטגוריות', component: <CategoriesStep onCategoriesChange={setCategories} /> },
+    { title: 'ייבוא נתונים', component: <ImportDataStep categories={categories} /> },
   ];
   
   const handleNext = () => {
@@ -26,7 +26,7 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
       setStep(step + 1);
     } else {
       // Complete setup
-      completeSetup();
+      completeSetup(categories);
       onComplete();
     }
   };
@@ -46,9 +46,9 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-3xl">
         <CardContent className="p-6">
-          <div className="mb-6">
+          <div className="flex flex-col gap-2 mb-6">
             <h2 className="text-2xl font-bold text-gray-800">{steps[step].title}</h2>
-            <div className="mt-2 flex space-x-1">
+            <div className="flex gap-1">
               {steps.map((_, index) => (
                 <div
                   key={index}
@@ -67,17 +67,17 @@ const SetupWizard: React.FC<SetupWizardProps> = ({ onComplete }) => {
           <div>
             {step > 0 ? (
               <Button variant="secondary" onClick={handleBack}>
-                Back
+                חזרה
               </Button>
             ) : (
               <Button variant="outline" onClick={handleSkip}>
-                Skip Setup
+                דלג על ההגדרות
               </Button>
             )}
           </div>
           
           <Button onClick={handleNext}>
-            {step < steps.length - 1 ? 'Next' : 'Finish Setup'}
+            {step < steps.length - 1 ? 'הבא' : 'סיים הגדרות'}
           </Button>
         </CardFooter>
       </Card>

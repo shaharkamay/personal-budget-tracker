@@ -4,15 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 const STORAGE_KEY = 'budget_tracker_data';
 
 const defaultCategories: Category[] = [
-  { id: uuidv4(), name: 'Housing', color: '#4f46e5', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Food', color: '#10b981', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Transportation', color: '#f59e0b', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Utilities', color: '#6366f1', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Healthcare', color: '#ef4444', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Personal', color: '#8b5cf6', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Entertainment', color: '#ec4899', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Education', color: '#0ea5e9', budgetLimit: 0 },
-  { id: uuidv4(), name: 'Miscellaneous', color: '#64748b', budgetLimit: 0 },
+  { id: uuidv4(), name: 'דיור', color: '#4f46e5', budgetLimit: 0 },
+  { id: uuidv4(), name: 'מזון', color: '#10b981', budgetLimit: 0 },
+  { id: uuidv4(), name: 'תחבורה', color: '#f59e0b', budgetLimit: 0 },
+  { id: uuidv4(), name: 'חשבונות', color: '#6366f1', budgetLimit: 0 },
+  { id: uuidv4(), name: 'בריאות', color: '#ef4444', budgetLimit: 0 },
+  { id: uuidv4(), name: 'אישי', color: '#8b5cf6', budgetLimit: 0 },
+  { id: uuidv4(), name: 'בידור', color: '#ec4899', budgetLimit: 0 },
+  { id: uuidv4(), name: 'חינוך', color: '#0ea5e9', budgetLimit: 0 },
+  { id: uuidv4(), name: 'שונות', color: '#64748b', budgetLimit: 0 },
 ];
 
 const defaultData: BudgetData = {
@@ -123,9 +123,10 @@ export const deleteIncome = (incomeId: string): void => {
   saveBudgetData(data);
 };
 
-export const completeSetup = (): void => {
+export const completeSetup = (categories?: Category[]): void => {
   const data = getBudgetData();
   data.setupComplete = true;
+  if (categories) data.categories = categories;
   saveBudgetData(data);
 };
 

@@ -22,15 +22,15 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ expense, categories, 
     const newErrors: { [key: string]: string } = {};
     
     if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-      newErrors.amount = 'Please enter a valid amount';
+      newErrors.amount = 'אנא הזן סכום תקין';
     }
     
     if (!categoryId) {
-      newErrors.categoryId = 'Please select a category';
+      newErrors.categoryId = 'אנא בחר קטגוריה';
     }
     
     if (!date) {
-      newErrors.date = 'Please select a date';
+      newErrors.date = 'אנא בחר תאריך';
     }
     
     setErrors(newErrors);
@@ -59,7 +59,7 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ expense, categories, 
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
         <Input
-          label="Amount"
+          label="סכום"
           type="number"
           min="0.01"
           step="0.01"
@@ -71,7 +71,7 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ expense, categories, 
         />
         
         <Select
-          label="Category"
+          label="קטגוריה"
           options={categories.map(category => ({
             value: category.id,
             label: category.name,
@@ -83,16 +83,16 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ expense, categories, 
         />
         
         <Input
-          label="Description"
+          label="תיאור"
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="What was this expense for?"
+          placeholder="למה שימשה ההוצאה?"
           fullWidth
         />
         
         <Input
-          label="Date"
+          label="תאריך"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -102,11 +102,11 @@ const EditExpenseForm: React.FC<EditExpenseFormProps> = ({ expense, categories, 
       </div>
       
       <div className="flex justify-end space-x-2 mt-6">
-        <Button type="button" variant="secondary" onClick={onClose}>
-          Cancel
-        </Button>
         <Button type="submit">
-          Update Expense
+          עדכן הוצאה
+        </Button>
+        <Button type="button" variant="secondary" onClick={onClose}>
+          ביטול
         </Button>
       </div>
     </form>

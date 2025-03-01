@@ -17,11 +17,11 @@ const AddIncomeForm: React.FC<AddIncomeFormProps> = ({ onClose }) => {
     const newErrors: { [key: string]: string } = {};
     
     if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-      newErrors.amount = 'Please enter a valid amount';
+      newErrors.amount = 'אנא הזן סכום תקין';
     }
     
     if (!date) {
-      newErrors.date = 'Please select a date';
+      newErrors.date = 'אנא בחר תאריך';
     }
     
     setErrors(newErrors);
@@ -48,7 +48,7 @@ const AddIncomeForm: React.FC<AddIncomeFormProps> = ({ onClose }) => {
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
         <Input
-          label="Amount"
+          label="סכום"
           type="number"
           min="0.01"
           step="0.01"
@@ -60,16 +60,16 @@ const AddIncomeForm: React.FC<AddIncomeFormProps> = ({ onClose }) => {
         />
         
         <Input
-          label="Description"
+          label="תיאור"
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Source of income"
+          placeholder="מקור ההכנסה"
           fullWidth
         />
         
         <Input
-          label="Date"
+          label="תאריך"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -78,12 +78,12 @@ const AddIncomeForm: React.FC<AddIncomeFormProps> = ({ onClose }) => {
         />
       </div>
       
-      <div className="flex justify-end space-x-2 mt-6">
+      <div className="flex gap-2 justify-end mt-6">
         <Button type="button" variant="secondary" onClick={onClose}>
-          Cancel
+          ביטול
         </Button>
         <Button type="submit" variant="success">
-          Add Income
+          הוסף הכנסה
         </Button>
       </div>
     </form>

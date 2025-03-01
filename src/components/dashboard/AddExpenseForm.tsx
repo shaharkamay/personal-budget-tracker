@@ -22,15 +22,15 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ categories, onClose }) 
     const newErrors: { [key: string]: string } = {};
     
     if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-      newErrors.amount = 'Please enter a valid amount';
+      newErrors.amount = 'אנא הזן סכום תקין';
     }
     
     if (!categoryId) {
-      newErrors.categoryId = 'Please select a category';
+      newErrors.categoryId = 'אנא בחר קטגוריה';
     }
     
     if (!date) {
-      newErrors.date = 'Please select a date';
+      newErrors.date = 'אנא בחר תאריך';
     }
     
     setErrors(newErrors);
@@ -58,7 +58,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ categories, onClose }) 
     <form onSubmit={handleSubmit}>
       <div className="space-y-4">
         <Input
-          label="Amount"
+          label="סכום"
           type="number"
           min="0.01"
           step="0.01"
@@ -70,7 +70,7 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ categories, onClose }) 
         />
         
         <Select
-          label="Category"
+          label="קטגוריה"
           options={categories.map(category => ({
             value: category.id,
             label: category.name,
@@ -82,16 +82,16 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ categories, onClose }) 
         />
         
         <Input
-          label="Description"
+          label="תיאור"
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="What was this expense for?"
+          placeholder="למה שימשה ההוצאה?"
           fullWidth
         />
         
         <Input
-          label="Date"
+          label="תאריך"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -100,12 +100,12 @@ const AddExpenseForm: React.FC<AddExpenseFormProps> = ({ categories, onClose }) 
         />
       </div>
       
-      <div className="flex justify-end space-x-2 mt-6">
+      <div className="flex gap-2 justify-end mt-6">
         <Button type="button" variant="secondary" onClick={onClose}>
-          Cancel
+          ביטול
         </Button>
         <Button type="submit">
-          Add Expense
+          הוסף הוצאה
         </Button>
       </div>
     </form>

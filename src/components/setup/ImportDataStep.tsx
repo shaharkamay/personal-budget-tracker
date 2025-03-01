@@ -18,7 +18,7 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
   
   const handleExpensesImport = (data: any) => {
     try {
-      const { expenses, newCategories } = parseExpensesFromCSV(data, categories);
+      const { expenses, newCategories } = parseExpensesFromCSV(data.data, categories);
       
       // First add any new categories
       const addedCategories = newCategories.map(category => addCategory(category));
@@ -37,17 +37,17 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
       });
       
       setImportStatus('success');
-      setImportMessage(`Successfully imported ${expenses.length} expenses and ${newCategories.length} new categories.`);
+      setImportMessage(`ייבוא מוצלח של ${expenses.length} הוצאות ו-${newCategories.length} קטגוריות חדשות.`);
     } catch (error) {
       console.error('Error importing expenses:', error);
       setImportStatus('error');
-      setImportMessage('Failed to import expenses. Please check your CSV format.');
+      setImportMessage('נכשל בייבוא הוצאות. אנא בדוק את פורמט ה-CSV.');
     }
   };
   
   const handleIncomesImport = (data: any) => {
     try {
-      const incomes = parseIncomesFromCSV(data);
+      const incomes = parseIncomesFromCSV(data.data);
       
       // Add incomes
       incomes.forEach(income => {
@@ -55,27 +55,27 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
       });
       
       setImportStatus('success');
-      setImportMessage(`Successfully imported ${incomes.length} income entries.`);
+      setImportMessage(`ייבוא מוצלח של ${incomes.length} רשומות הכנסה.`);
     } catch (error) {
       console.error('Error importing incomes:', error);
       setImportStatus('error');
-      setImportMessage('Failed to import incomes. Please check your CSV format.');
+      setImportMessage('נכשל בייבוא הכנסות. אנא בדוק את פורמט ה-CSV.');
     }
   };
   
   return (
     <div>
       <p className="text-gray-600 mb-6">
-        Optionally, you can import your existing expense and income data from CSV files.
-        This step is optional - you can always import data later.
+        באופן אופציונלי, תוכל לייבא את נתוני ההוצאות וההכנסות הקיימים שלך מקבצי CSV.
+        שלב זה הוא אופציונלי - תמיד תוכל לייבא נתונים מאוחר יותר.
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Card>
           <CardContent className="p-4">
-            <h4 className="font-medium text-gray-700 mb-2">Import Expenses</h4>
-            <p className="text-sm text-gray-500 mb-4">
-              CSV format: Date, Amount, Category, Description
+            <h4 className="font-medium text-gray-700 mb-2">ייבוא הוצאות</h4>
+            <p className="text-xs text-gray-500 mb-4">
+              פורמט CSV: תאריך, סכום, קטגוריה, תיאור
             </p>
             
             <CSVReader
@@ -93,8 +93,8 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
                   fullWidth
                   {...getRootProps()}
                 >
-                  <FileUp size={16} className="mr-2" />
-                  Choose Expenses CSV
+                  <FileUp size={16} className="ml-2" />
+                  בחר קובץ CSV של הוצאות
                 </Button>
               )}
             </CSVReader>
@@ -103,9 +103,9 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
         
         <Card>
           <CardContent className="p-4">
-            <h4 className="font-medium text-gray-700 mb-2">Import Income</h4>
-            <p className="text-sm text-gray-500 mb-4">
-              CSV format: Date, Amount, Description
+            <h4 className="font-medium text-gray-700 mb-2">ייבוא הכנסות</h4>
+            <p className="text-xs text-gray-500 mb-4">
+              פורמט CSV: תאריך, סכום, תיאור
             </p>
             
             <CSVReader
@@ -123,8 +123,8 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
                   fullWidth
                   {...getRootProps()}
                 >
-                  <FileUp size={16} className="mr-2" />
-                  Choose Income CSV
+                  <FileUp size={16} className="ml-2" />
+                  בחר קובץ CSV של הכנסות
                 </Button>
               )}
             </CSVReader>
@@ -140,9 +140,9 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
         >
           <div className="flex items-center">
             {importStatus === 'success' ? (
-              <Check size={20} className="mr-2" />
+              <Check size={20} className="ml-2" />
             ) : (
-              <AlertCircle size={20} className="mr-2" />
+              <AlertCircle size={20} className="ml-2" />
             )}
             <p>{importMessage}</p>
           </div>
@@ -150,7 +150,7 @@ const ImportDataStep: React.FC<ImportDataStepProps> = ({ categories }) => {
       )}
       
       <p className="text-sm text-gray-500">
-        Tip: You can skip this step and manually add your expenses and income later.
+        טיפ: תוכל לדלג על שלב זה ולהוסיף את ההוצאות וההכנסות שלך באופן ידני מאוחר יותר.
       </p>
     </div>
   );

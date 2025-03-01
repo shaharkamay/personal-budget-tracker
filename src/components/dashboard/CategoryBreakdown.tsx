@@ -57,6 +57,10 @@ const CategoryBreakdown: React.FC<CategoryBreakdownProps> = ({ categories, expen
       legend: {
         display: false,
       },
+      tooltip: {
+        rtl: true,
+        textDirection: 'rtl'
+      }
     },
     cutout: '70%',
     responsive: true,
@@ -75,7 +79,7 @@ const CategoryBreakdown: React.FC<CategoryBreakdownProps> = ({ categories, expen
             <div className="flex justify-between items-center mb-1">
               <div className="flex items-center">
                 <div
-                  className="w-3 h-3 rounded-full mr-2"
+                  className="w-3 h-3 rounded-full ml-2"
                   style={{ backgroundColor: category.color }}
                 />
                 <span className="text-sm font-medium">{category.name}</span>

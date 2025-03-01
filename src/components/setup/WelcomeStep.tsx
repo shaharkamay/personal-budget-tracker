@@ -10,33 +10,33 @@ const WelcomeStep: React.FC = () => {
         </div>
       </div>
       
-      <h3 className="text-xl font-semibold mb-4">Welcome to Your Personal Budget Tracker</h3>
+      <h3 className="text-xl font-semibold mb-4">ברוכים הבאים למעקב התקציב האישי שלך</h3>
       
       <p className="text-gray-600 mb-6">
-        This wizard will help you set up your budget tracking system. You'll be able to:
+        מדריך זה יעזור לך להגדיר את מערכת מעקב התקציב שלך. תוכל:
       </p>
       
-      <ul className="text-left text-gray-600 space-y-2 mb-6 max-w-md mx-auto">
+      <ul className="text-right text-gray-600 space-y-2 mb-6 max-w-md mx-auto">
         <li className="flex items-start">
-          <span className="mr-2 text-blue-500">✓</span>
-          <span>Define custom expense categories</span>
+          <span className="ml-2 text-blue-500">✓</span>
+          <span>להגדיר קטגוריות הוצאה מותאמות אישית</span>
         </li>
         <li className="flex items-start">
-          <span className="mr-2 text-blue-500">✓</span>
-          <span>Set monthly budget limits for each category</span>
+          <span className="ml-2 text-blue-500">✓</span>
+          <span>לקבוע מגבלות תקציב חודשיות לכל קטגוריה</span>
         </li>
         <li className="flex items-start">
-          <span className="mr-2 text-blue-500">✓</span>
-          <span>Import existing expense data (optional)</span>
+          <span className="ml-2 text-blue-500">✓</span>
+          <span>לייבא נתוני הוצאות קיימים (אופציונלי)</span>
         </li>
         <li className="flex items-start">
-          <span className="mr-2 text-blue-500">✓</span>
-          <span>Track and visualize your spending habits</span>
+          <span className="ml-2 text-blue-500">✓</span>
+          <span>לעקוב ולהציג את הרגלי ההוצאות שלך</span>
         </li>
       </ul>
       
       <p className="text-gray-600">
-        Let's get started by setting up your expense categories!
+        בואו נתחיל בהגדרת קטגוריות ההוצאות שלך!
       </p>
     </div>
   );
