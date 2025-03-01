@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "vite.svg", "vite.svg"],
+      includeAssets: ["favicon.ico", "app-logo.svg", "app-logo.svg"],
       manifest: {
         name: "Budget Tracker",
         short_name: "AppName",
