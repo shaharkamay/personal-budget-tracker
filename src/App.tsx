@@ -64,13 +64,15 @@ function App() {
             >
               <Settings size={20} className="text-gray-600" />
             </button>
-            <button
-              onClick={displayInstallPrompt}
-              className="p-2 rounded-full hover:bg-gray-100"
-              aria-label="התקנה"
-            >
-              <Download size={20} className="text-gray-600" />
-            </button>
+            {defferedPrompt && (
+              <button
+                onClick={displayInstallPrompt}
+                className="p-2 rounded-full hover:bg-gray-100"
+                aria-label="התקנה"
+              >
+                <Download size={20} className="text-gray-600" />
+              </button>
+            )}
           </div>
         </div>
       </header>
