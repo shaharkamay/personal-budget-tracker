@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getBudgetData } from '../../utils/storage';
-import { calculateMonthlyBudget, formatCurrency } from '../../utils/calculations';
+import { calculateMonthlyBudget } from '../../utils/calculations';
 import { BudgetData, MonthlyBudgetSummary } from '../../types';
 import BudgetSummary from './BudgetSummary';
 import ExpenseList from './ExpenseList';
@@ -8,8 +8,7 @@ import CategoryBreakdown from './CategoryBreakdown';
 import AddExpenseForm from './AddExpenseForm';
 import AddIncomeForm from './AddIncomeForm';
 import { Card, CardContent, CardHeader } from '../ui/Card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { PlusCircle, Download, Upload } from 'lucide-react';
+import { PlusCircle, Download } from 'lucide-react';
 import Button from '../ui/Button';
 import { prepareExpensesForExport, prepareIncomesForExport, downloadCSV } from '../../utils/csv';
 

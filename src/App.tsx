@@ -3,17 +3,38 @@ import { getBudgetData } from "./utils/storage";
 import SetupWizard from "./components/setup/SetupWizard";
 import Dashboard from "./components/dashboard/Dashboard";
 import SettingsPage from "./components/settings/SettingsPage";
-import { Settings } from "lucide-react";
+import { Download, Settings } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import { BeforeInstallPromptEvent } from "./types";
 
 function App() {
   const [setupComplete, setSetupComplete] = useState<boolean | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [defferedPrompt, setDefferedPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
 
+  console.log(defferedPrompt);
   useEffect(() => {
     const data = getBudgetData();
     setSetupComplete(data.setupComplete);
   }, []);
+
+  useEffect(() => {
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      setDefferedPrompt(e);
+    });
+  }, [])
+
+  const displayInstallPrompt = async () => {
+    if (defferedPrompt !== null) {
+      defferedPrompt.prompt();
+      const { outcome } = await defferedPrompt.userChoice;
+      if (outcome === "accepted") {
+        setDefferedPrompt(null);
+      }
+    }
+  };
 
   if (setupComplete === null) {
     return (
@@ -44,12 +65,15 @@ function App() {
             >
               <Settings size={20} className="text-gray-600" />
             </button>
-            <button
-              onClick={() => {}}
-              className="p-2 rounded-full hover:bg-gray-100"
-            >
-              pwa
-            </button>
+            {defferedPrompt && (
+              <button
+                onClick={displayInstallPrompt}
+                className="p-2 rounded-full hover:bg-gray-100"
+                aria-label="התקנה"
+              >
+                <Download size={20} className="text-gray-600" />
+              </button>
+            )}
           </div>
         </div>
       </header>
