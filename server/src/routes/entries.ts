@@ -1,8 +1,11 @@
 // src/routes/entriesRoutes.ts
 import { Router } from 'express';
 import { EntriesController } from '../controllers/entries';
+import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
+
+router.use(authenticateToken);
 
 // GET /api/entries - Get all entries
 router.get('/', EntriesController.getEntries);

@@ -36,12 +36,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(userData);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const login = (userData: User): void => {
+  const login = React.useCallback((userData: User): void => {
     setUser(userData);
     setIsAuthenticated(true);
     // You might want to store in localStorage for persistence
     localStorage.setItem("user", JSON.stringify(userData));
-  };
+  }, [setUser, setIsAuthenticated]);
 
   const logout = (): void => {
     setUser(null);

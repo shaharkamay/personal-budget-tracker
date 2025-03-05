@@ -1,118 +1,121 @@
-// src/services/publicSheetsService.ts
-import { BudgetData, Category, Expense, Income } from '../types';
-import { v4 as uuidv4 } from 'uuid';
+import { fetchApi } from "./api";
 
-const SPREADSHEET_ID = '1tNkd4NYs35awPlODfkoB8x5hDiXgQpw3n9WyCSEhG0U';
-const API_KEY = 'AIzaSyAzi4J0EAQ12wvFsZgI-EtLIerS-N4Yxj8';
+// src/services/sheets.ts
+interface Category {
+  name: string;
+  color: string;
+  budgetLimit: number;
+}
 
-// Get data from a sheet
-export const getSheetData = async (
-  sheetName: string,
-  range: string = "A:Z"
-): Promise<any[][]> => {
+interface Entry {
+  date: string;
+  category: string;
+  amount: number;
+  description: string;
+  rowIndex?: number;
+}
+
+// Get sheet data for a specific month
+export const getSheetData = async (month: string): Promise<Entry[]> => {
   try {
-    const response = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${sheetName}!${range}?key=${API_KEY}`
-    );
+    const response = await fetchApi<Entry[]>(`entries?month=${encodeURIComponent(month)}`);
     
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.success || !response.data) {
+      console.error('Error fetching sheet data:', response.error);
+      return [];
     }
     
-    const data = await response.json();
-    console.log(data);
-    return data.values || [];
+    return response.data;
   } catch (error) {
-    console.error(`Error fetching ${sheetName} data:`, error);
-    throw error;
+    console.error('Error in getSheetData:', error);
+    return [];
   }
 };
 
-// Get all data from the spreadsheet
-export const getAllData = async (): Promise<BudgetData> => {
+// Add a new entry
+export const addEntry = async (entry: Omit<Entry, 'rowIndex'>): Promise<boolean> => {
   try {
-    // Get categories
-    const categoriesValues = await getSheetData('Categories');
-    
-    // Skip the header row (first row)
-    const categories: Category[] = categoriesValues.slice(1).map(row => ({
-      id: row[0],
-      name: row[1],
-      color: row[2],
-      budgetLimit: Number(row[3]),
-    }));
-    
-    // Get expenses
-    const expensesValues = await getSheetData('Expenses');
-    
-    const expenses: Expense[] = expensesValues.slice(1).map(row => ({
-      id: row[0],
-      amount: Number(row[1]),
-      categoryId: row[2],
-      description: row[3],
-      date: row[4],
-    }));
-    
-    // Get incomes
-    const incomesValues = await getSheetData('Incomes');
-    
-    const incomes: Income[] = incomesValues.slice(1).map(row => ({
-      id: row[0],
-      amount: Number(row[1]),
-      description: row[2],
-      date: row[3],
-    }));
-    
-    // Get config
-    const configValues = await getSheetData('Config');
-    
-    const configMap = new Map<string, string>();
-    configValues.slice(1).forEach(row => {
-      configMap.set(row[0], row[1]);
-    });
-    
-    return {
-      categories,
-      expenses,
-      incomes,
-      setupComplete: configMap.get('setupComplete') === 'true',
-    };
+    const response = await fetchApi<null>(`entries`, {method: 'POST', body: JSON.stringify(entry)});
+    return response.success;
   } catch (error) {
-    console.error('Error fetching all data:', error);
-    throw error;
+    console.error('Error in addEntry:', error);
+    return false;
   }
 };
 
-export const addCategory = async (category: Category): Promise<boolean> => {
-    try {
-      // Ensure the category has an ID
-      if (!category.id) {
-        category.id = uuidv4();
-      }
-      
-      const response = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Categories!A:D:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS&key=${API_KEY}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            values: [[category.id, category.name, category.color, category.budgetLimit]],
-          }),
-        }
-      );
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API error:', errorData);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      return true;
-    } catch (error) {
-      console.error('Error adding category:', error);
-      return false;
-    }
-  };
+// Update an existing entry
+export const updateEntry = async (entry: Entry): Promise<boolean> => {
+  if (entry.rowIndex === undefined) {
+    console.error('Cannot update entry without rowIndex');
+    return false;
+  }
   
+  try {
+    const response = await fetchApi<null>(`entries/${entry.rowIndex}`, {method: 'PUT', body: JSON.stringify(entry)});
+    return response.success;
+  } catch (error) {
+    console.error('Error in updateEntry:', error);
+    return false;
+  }
+};
+
+// Delete an entry
+export const deleteEntry = async (rowIndex: number): Promise<boolean> => {
+  try {
+    const response = await fetchApi<null>(`entries/${rowIndex}`, {method: 'DELETE'});
+    return response.success;
+  } catch (error) {
+    console.error('Error in deleteEntry:', error);
+    return false;
+  }
+};
+
+// Get all categories
+export const getCategories = async (): Promise<Category[]> => {
+  try {
+    const response = await fetchApi<Category[]>('categories');
+    
+    if (!response.success || !response.data) {
+      console.error('Error fetching categories:', response.error);
+      return [];
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error in getCategories:', error);
+    return [];
+  }
+};
+
+// Add a new category
+export const addCategory = async (category: Category): Promise<boolean> => {
+  try {
+    const response = await fetchApi<null>('categories', {method: 'POST', body: JSON.stringify(category)});
+    return response.success;
+  } catch (error) {
+    console.error('Error in addCategory:', error);
+    return false;
+  }
+};
+
+// Update a category
+export const updateCategory = async (categoryId: string, category: Category): Promise<boolean> => {
+  try {
+    const response = await fetchApi<null>(`categories/${categoryId}`, {method: 'PUT', body: JSON.stringify(category)});
+    return response.success;
+  } catch (error) {
+    console.error('Error in updateCategory:', error);
+    return false;
+  }
+};
+
+// Delete a category
+export const deleteCategory = async (categoryId: string): Promise<boolean> => {
+  try {
+    const response = await fetchApi<null>(`categories/${categoryId}`, {method: 'DELETE'});
+    return response.success;
+  } catch (error) {
+    console.error('Error in deleteCategory:', error);
+    return false;
+  }
+};

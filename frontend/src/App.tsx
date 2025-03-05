@@ -6,7 +6,7 @@ import SettingsPage from "./components/settings/SettingsPage";
 import { Download, Settings } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { BeforeInstallPromptEvent } from "./types";
-import { addCategory, getSheetData } from "./services/sheets";
+import { getSheetData, addCategory } from "./services/sheets";
 import {
   GoogleOAuthProvider,
   GoogleLogin,
@@ -36,6 +36,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [defferedPrompt, setDefferedPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (e) => {
@@ -45,11 +46,48 @@ function App() {
     const data = getBudgetData();
     setSetupComplete(data.setupComplete);
 
-    getSheetData("פברואר 2025").then((data) => {
-      console.log(data);
-    });
-    addCategory({ name: "קטגוריה חדשה", color: "#000000", budgetLimit: 1000 });
-  }, []);
+    // Check if the user is already authenticated
+    const token = localStorage.getItem('googleToken');
+    if (token) {
+      try {
+        const decodedUser: GoogleUserType = jwtDecode(token);
+        const userData = {
+          email: decodedUser.email,
+          name: decodedUser.name,
+          picture: decodedUser.picture,
+          sub: decodedUser.sub,
+        };
+        login(userData);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        // Invalid token, clear it
+        localStorage.removeItem('googleToken');
+      }
+    }
+    
+    setIsLoading(false);
+  }, [login]);
+
+  useEffect(() => {
+    // Only fetch data if the user is authenticated
+    if (isAuthenticated) {
+      // Example data fetching
+      getSheetData("פברואר 2025").then((data) => {
+        console.log(data);
+      });
+
+      // Example of adding a category
+      addCategory({ 
+        name: "קטגוריה חדשה", 
+        color: "#000000", 
+        budgetLimit: 1000 
+      }).then(success => {
+        if (success) {
+          console.log("Category added successfully");
+        }
+      });
+    }
+  }, [isAuthenticated]);
 
   const displayInstallPrompt = async () => {
     if (defferedPrompt !== null) {
@@ -72,17 +110,21 @@ function App() {
         name: decodedUser.name,
         picture: decodedUser.picture,
         sub: decodedUser.sub,
-        // Add any other fields you need
       };
 
       login(userData);
 
       localStorage.setItem("googleToken", credentialResponse.credential);
-
-      // Store user info in state or context
-      // You can also send this token to your backend for verification
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500">טוען...</p>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
@@ -119,8 +161,8 @@ function App() {
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex gap-4">
-          <h1 className="text-xl font-bold text-gray-800">מעקב תקציב אישי</h1>
-          {user?.name}
+            <h1 className="text-xl font-bold text-gray-800">מעקב תקציב אישי</h1>
+            {user?.name}
           </div>
           <div>
             <button
